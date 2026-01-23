@@ -1,7 +1,7 @@
 import requests
 import sys
 
-print("--- Script Starting ---")
+print("--- Jikan API Script Starting ---")
 
 def test_jikan():
     url = "https://api.jikan.moe/v4/top/anime"
@@ -11,7 +11,6 @@ def test_jikan():
         
         if response.status_code == 200:
             data = response.json()
-            # Jikan returns a list under the 'data' key
             top_anime = data['data'][0]['title']
             print(f"SUCCESS! The top anime is: {top_anime}")
         else:

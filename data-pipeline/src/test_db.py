@@ -2,7 +2,6 @@ import os
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-# Force print to see if script even starts
 print("--- DB Test Script Started ---")
 
 load_dotenv()
@@ -19,13 +18,11 @@ def test_db_connection():
     connection_string = f"postgresql://{user}:{pw}@{host}:{port}/{db}"
     
     try:
-        engine = create_engine(connection_string)
-        # The 'with' block ensures the connection closes automatically
+        engine = create_engine(connection_string)     
         with engine.connect() as conn:
             print("Successfully connected to the PostgreSQL database!")
     except Exception as e:
         print(f"Failed to connect: {e}")
 
-# Call the function directly to ensure it runs
 test_db_connection()
 print("--- DB Test Script Finished ---")
