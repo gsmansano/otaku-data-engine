@@ -9,3 +9,8 @@ __pycache__/
 # Operating System
 .DS_Store
 Thumbs.db
+
+# dbt artifacts
+docker/dbt_project/target/
+docker/dbt_project/dbt_packages/
+docker/dbt_project/logs/
