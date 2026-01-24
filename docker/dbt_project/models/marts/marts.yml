@@ -1,0 +1,66 @@
+version: 2
+
+models: 
+  # adding some testing to studios;
+  # unique ids, no nulls
+  - name: dim_studios
+    columns:
+      - name: studio_id
+        tests:
+          - unique
+          - not_null
+  
+  - name: dim_genres
+    columns:
+      - name: genre_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_themes
+    columns:
+      - name: theme_id
+        tests:
+          - unique
+          - not_null
+  
+  # bridge tables 
+  # testing the reference integrity
+  - name: bridge_anime_studios
+    columns:
+      - name: studio_id
+        tests:
+          - relationships:
+              to: ref('dim_studios')
+              field: studio_id
+      - name: anime_id
+        tests:
+          - relationships:
+              to: ref('stg_anime')
+              field: anime_id
+
+  - name: bridge_anime_genres
+    columns:
+      - name: genre_id
+        tests:
+          - relationships:
+              to: ref('dim_genres')
+              field: genre_id
+      - name: anime_id
+        tests:
+          - relationships:
+              to: ref('stg_anime')
+              field: anime_id
+
+  - name: bridge_anime_themes
+    columns:
+      - name: theme_id
+        tests:
+          - relationships:
+              to: ref('dim_themes')
+              field: theme_id
+      - name: anime_id
+        tests:
+          - relationships:
+              to: ref('stg_anime')
+              field: anime_id
