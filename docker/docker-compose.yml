@@ -28,7 +28,7 @@ services:
     image: ghcr.io/dbt-labs/dbt-postgres:1.7.3
     container_name: otaku_dbt
     volumes:
-      - ./dbt_project:/usr/app/dbt_project
+      - ../transform:/usr/app/dbt_project
       - ~/.dbt:/root/.dbt
     environment:
       - DB_HOST=db
