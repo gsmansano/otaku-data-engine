@@ -1,8 +1,9 @@
 import express from 'express';
-import { getTopAnime } from '../controllers/animeController.js';
+import { getTopAnime, getAnimeById } from '../controllers/animeController.js';
 
 const router = express.Router();
 
 router.get('/', getTopAnime);
+router.get('/:id', getAnimeById);
 
 export default router;
