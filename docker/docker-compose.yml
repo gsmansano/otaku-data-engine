@@ -31,6 +31,8 @@ services:
       - ../transform:/usr/app/dbt_project
       - ~/.dbt:/root/.dbt
     environment:
+      - DBT_PROJECT_DIR=/usr/app/dbt_project
+      - DBT_PROFILES_DIR=/usr/app/dbt_project
       - DB_HOST=db
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}

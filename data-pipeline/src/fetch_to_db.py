@@ -1,7 +1,7 @@
 import os
 import requests
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 import time
 
@@ -33,25 +33,31 @@ def fetch_and_load_anime():
             data = response.json()['data']
 
             for item in data:
-                display_title = next((t['title'] for t in item['titles'] if t['type'] == 'Default'), item['title'])
+                display_title = next((t['title'] for t in item['titles'] if t['type'] == 'Default'), item.get('title'))
 
                 record = {
-                    'mal_id': item['mal_id'],
+                    'mal_id': item.get('mal_id'),
                     'title': display_title,
-                    'type': item['type'],
-                    'source': item['source'],
-                    'episodes': item['episodes'],
-                    'status': item['status'],   
-                    'year': item['year'],
-                    'score': item['score'],
-                    'scored_by': item['scored_by'],
-                    'rank': item['rank'],
-                    'popularity': item['popularity'],
-                    'members': item['members'],
-                    'favorites': item['favorites'],
-                    'studios': clean_nested_list(item['studios']),
-                    'genres': clean_nested_list(item['genres']),
-                    'themes': clean_nested_list(item['themes'])
+                    'type': item.get('type'),
+                    'source': item.get('source'),
+                    'episodes': item.get('episodes'),
+                    'status': item.get('status'),
+                    'year': item.get('year'),
+                    'season': item.get('season'),
+                    'aired_from': item.get('aired', {}).get('from'), 
+                    'rating': item.get('rating'),
+                    'score': item.get('score'),
+                    'scored_by': item.get('scored_by'),
+                    'rank': item.get('rank'),
+                    'popularity': item.get('popularity'),
+                    'members': item.get('members'),
+                    'favorites': item.get('favorites'),
+                    'synopsis': item.get('synopsis'),
+                    'image_url': item.get('images', {}).get('jpg', {}).get('image_url'),
+                    'studios': clean_nested_list(item.get('studios')),
+                    'genres': clean_nested_list(item.get('genres')),
+                    'themes': clean_nested_list(item.get('themes')),
+                    'demographics': clean_nested_list(item.get('demographics'))
                 }
                 all_records.append(record)
             
@@ -62,7 +68,22 @@ def fetch_and_load_anime():
     
     if all_records:
         df = pd.DataFrame(all_records)
-        df.to_sql('raw_top_anime', engine, if_exists='replace', index=False)
+        
+        # main method, table exists and is being updated
+        load_method = 'append'
+        try:
+            with engine.begin() as conn:
+                conn.execute(text("TRUNCATE TABLE raw_top_anime CASCADE;"))
+                print("Table found. Truncating data.")
+                
+        except Exception:
+            # this will catch any first run, where there is no table, and create the first table.
+            print("No table found, creating.")
+            load_method = 'replace'
+        
+        with engine.begin() as conn:
+            df.to_sql('raw_top_anime', conn, if_exists=load_method, index=False)
+            
         print(f"Success! {len(df)} anime loaded into 'raw_top_anime' table.")
 
 if __name__ == "__main__":

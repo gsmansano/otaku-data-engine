@@ -6,14 +6,15 @@ An end-to-end Data Engineering pipeline designed to extract, transform, and load
 This project serves as a portfolio piece demonstrating modern data engineering practices, including containerization, automated extraction, and relational database modeling.
 
 ## 🛠️ Tech Stack
-* **Language:** Python 3
-* **Infrastructure:** Docker, Docker Compose
-* **Database:** PostgreSQL 15
-* **Database Management:** pgAdmin 4
-* **Libraries:** Pandas, SQLAlchemy, Requests, Python-Dotenv
+* **Orchestration & Infrastructure:** Docker, Docker Compose
+* **Data Extraction:** Python (Requests, Pandas)
+* **Storage:** PostgreSQL 15
+* **Transformation & Modeling:** dbt Core (Star Schema, Bridge Tables)
+* **Data Quality:** dbt-tests (Referential Integrity)
 
 ## 📂 Project Structure
-* `docker/`: Contains the configuration for the PostgreSQL and pgAdmin containers.
-* `data-pipeline/`: Contains the Python source code for the ETL processes.
-    * `src/`: Main scripts (Extraction, Loading).
-    * `test/`: Connection and unit tests.
+* `data-pipeline/`: Python scripts for API extraction and raw loading.
+* `transform/`: dbt models converting raw data into a validated Star Schema.
+* `docker/`: Infrastructure configuration (Postgres, pgAdmin, dbt-container).
+* `backend/`: Node.js API (In development).
+* `frontend/`: React Dashboard (In development).

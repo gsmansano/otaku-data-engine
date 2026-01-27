@@ -9,10 +9,14 @@ final as (
         anime_id,
         title,
         media_type,
-        status,
+        airing_status,
         anime_source,
         release_year,
-        episodes
+        episodes,
+        season,
+        rating,
+        synopsis,
+        image_url
     from source
 )
 

@@ -10,14 +10,23 @@ renamed as (
         -- text fields
         title,
         type as media_type,
-        status,
+        status as airing_status,
+        aired_from,
         source as anime_source,
         studios, -- may contain more than 1 studio
         genres, -- same, but almost def contains 1+
         themes, -- seen plenty of nulls, but mostly 1+
+        image_url,
+        demographics,
+        rating,
+        synopsis,
+        season,
         
         -- date/count fields
-        cast(year as integer) as release_year,
+        coalesce(
+            cast(year as integer), -- casting as integer
+            cast(substring(aired_from from 1 for 4) as integer) -- using the first 4 chars of the aired from (the year) to substitute, as a few are missing year
+            ) as release_year,
         cast(episodes as integer) as episodes,
         
         -- numeric fields
