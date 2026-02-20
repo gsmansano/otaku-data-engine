@@ -36,3 +36,28 @@ export const getYearlyTrends = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch yearly trends" });
   }
 };
+
+export const getStudioPerformance = async (req, res) => {
+  try {
+    const queryText = `
+      SELECT 
+        s.studio_name,
+        COUNT(m.anime_id) as total_anime,
+        ROUND(AVG(m.score), 2) as avg_studio_score,
+        SUM(m.members) as total_studio_reach
+      FROM mart_anime_overview m
+      JOIN bridge_anime_studios b ON m.anime_id = b.anime_id
+      JOIN dim_studios s ON b.studio_id = s.studio_id
+      GROUP BY s.studio_name
+      HAVING COUNT(m.anime_id) > 1
+      ORDER BY avg_studio_score DESC
+    `;
+
+    const { rows } = await db.query(queryText);
+    res.status(200).json(rows);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({error: 'Failed to fetch studio performance.'});
+  }
+};
