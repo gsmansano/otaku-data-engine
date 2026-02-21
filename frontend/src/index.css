@@ -1,0 +1,15 @@
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #9fa3a8;
+  color: #1a1a1a;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}

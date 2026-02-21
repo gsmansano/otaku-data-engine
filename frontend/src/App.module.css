@@ -1,0 +1,19 @@
+.container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboardGrid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}

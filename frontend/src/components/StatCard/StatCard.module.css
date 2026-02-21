@@ -1,0 +1,34 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 200px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.label {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.value {
+  margin: 10px 0 0 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.unit {
+  font-size: 1rem;
+  color: #888;
+  font-weight: normal;
+}

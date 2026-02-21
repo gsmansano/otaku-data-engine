@@ -11,7 +11,7 @@ This project demonstrates a full-cycle data journey: from raw API ingestion to a
 * **Storage:** PostgreSQL 15
 * **Transformation:** dbt Core (Star Schema, Bridge Tables)
 * **Backend:** Node.js (Express), ES Modules
-* **Environment:** Dotenv, PG-Pool
+* **Frontend:** React (Vite), CSS Modules, Axios
 
 ## 📈 Analytical Capabilities
 Unlike a standard anime list, this engine is built for **Landscape Analysis**:
@@ -22,6 +22,6 @@ Unlike a standard anime list, this engine is built for **Landscape Analysis**:
 ## 📂 Project Structure
 * `data-pipeline/`: Python scripts for API extraction and raw loading.
 * `transform/`: dbt models converting raw data into a validated Star Schema and Gold Layer Marts.
-* `backend/`: Node.js Express API serving market insights and individual anime data.
+* `backend/`: Node.js Express API serving market insights.
+* `frontend/`: React-based dashboard visualizing market intelligence.
 * `docker/`: Infrastructure configuration (Postgres, pgAdmin).
-* `frontend/`: React Dashboard (Planned).w
