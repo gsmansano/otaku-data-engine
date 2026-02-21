@@ -1,0 +1,36 @@
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 30px;
+}
+
+.links span {
+  margin: 0 10px;
+  cursor: pointer;
+  color: #0066cc;
+}
+
+.content {
+  min-height: 80vh;
+}
+
+.navItem {
+  margin: 0 10px;
+  cursor: pointer;
+  color: #0066cc;
+  text-decoration: none; /* Removes the default blue underline */
+  font-size: 0.9rem;
+}
+
+.navItem:hover {
+  text-decoration: underline;
+}

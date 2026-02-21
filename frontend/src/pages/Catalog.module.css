@@ -1,0 +1,29 @@
+.catalogContainer {
+  padding-bottom: 50px;
+}
+
+.animeTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.animeTable th, .animeTable td {
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.animeTable th {
+  background-color: #f8f9fa;
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.animeTable tr:hover {
+  background-color: #f1f7ff;
+}

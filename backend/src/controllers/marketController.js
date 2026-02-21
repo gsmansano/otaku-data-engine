@@ -7,7 +7,8 @@ export const getMarketSummary = async (req, res) => {
                 COUNT(*) as total_titles,
                 ROUND(AVG(members), 0) as avg_members_per_title,
                 MAX(members) as top_title_reach,
-                ROUND(AVG(score), 2) as average_market_score
+                ROUND(AVG(score), 2) as average_market_score,
+                (SELECT COUNT(*) FROM dim_studios) as total_studios
                 FROM mart_anime_overvieW`;
 
     const { rows } = await db.query(queryText);

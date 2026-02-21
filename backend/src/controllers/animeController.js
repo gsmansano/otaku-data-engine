@@ -2,10 +2,27 @@ import * as db from "../config/db.js";
 
 export const getTopAnime = async (req, res) => {
   try {
-    const queryText = "SELECT * FROM mart_anime_overview LIMIT 250";
-    const { rows } = await db.query(queryText);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
 
-    res.status(200).json(rows);
+    const queryText = `
+      SELECT anime_id, title, release_year, score, airing_status 
+      FROM mart_anime_overview 
+      ORDER BY score DESC 
+      LIMIT $1 OFFSET $2`;
+
+    const queryCount = `SELECT COUNT(*) FROM mart_anime_overview`;
+
+    const data = await db.query(queryText, [limit, offset]);
+    const totalCount = await db.query(queryCount);
+
+    res.status(200).json({
+      data: data.rows,
+      total: parseInt(totalCount.rows[0].count),
+      page,
+      totalPages: Math.ceil(totalCount.rows[0].count / limit),
+    });
   } catch (err) {
     console.error("Error fetching animes:", err);
     res.status(500).json({ error: "Database error." });
@@ -25,6 +42,6 @@ export const getAnimeById = async (req, res) => {
     res.status(200).json(rows[0]);
   } catch (error) {
     console.error("Error : ", error);
-    res.statuss(500).json({ error: "Database error" });
+    res.status(500).json({ error: "Database error" });
   }
 };
