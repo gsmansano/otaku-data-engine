@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
+import AnimeDetail from './pages/AnimeDetail';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/catalog" element={<Catalog />} />
+        <Route path="/anime/:id" element={<AnimeDetail />} />
       </Routes>
     </Layout>
   );

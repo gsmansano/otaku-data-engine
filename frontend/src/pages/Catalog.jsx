@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./Catalog.module.css";
+import { Link } from "react-router-dom";
 
 function Catalog() {
-  const [animeData, setAnimeData] = useState({data: [], totalPages: 0});
+  const [animeData, setAnimeData] = useState({ data: [], totalPages: 0 });
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +24,10 @@ function Catalog() {
 
   return (
     <div className={styles.catalogContainer}>
-      <h2>Anime Catalog</h2>
-      <p>Exploration of the top performing titles in the database.</p>
+      <header className={styles.catalogHeader}>
+        <h2>Anime Catalog</h2>
+        <p>Exploration of the top performing titles in the database.</p>
+      </header>
 
       {loading ? (
         <p>Loading catalog...</p>
@@ -38,31 +41,52 @@ function Catalog() {
                 <th>Year</th>
                 <th>Score</th>
                 <th>Status</th>
+                <th>Details</th>
               </tr>
             </thead>
             <tbody>
-              {animeData.data && animeData.data.map((anime, index) => (
-                <tr key={anime.anime_id}>
-                  <td>{(currentPage - 1) * 20 + index + 1}</td>
-                  <td><strong>{anime.title}</strong></td>
-                  <td>{anime.release_year}</td>
-                  <td>⭐ {anime.score}</td>
-                  <td>{anime.airing_status}</td>
-                </tr>
-              ))}
+              {animeData.data &&
+                animeData.data.map((anime, index) => (
+                  <tr key={anime.anime_id}>
+                    <td>{(currentPage - 1) * 20 + index + 1}</td>
+                    <td>
+                      <strong>{anime.title}</strong>
+                    </td>
+                    <td>{anime.release_year}</td>
+                    <td>⭐ {anime.score}</td>
+                    <td>{anime.airing_status}</td>
+                    <td>
+                      <Link
+                        to={`/anime/${anime.anime_id}`}
+                        className={styles.detailsBtn}
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
 
           <div className={styles.pagination}>
-            <button 
-              disabled={currentPage === 1} 
-              onClick={() => setCurrentPage(p => p - 1)}
-            > Previous </button>
-            <span> Page {currentPage} of {animeData.totalPages} </span>
-            <button 
-              disabled={currentPage === animeData.totalPages} 
-              onClick={() => setCurrentPage(p => p + 1)}
-            > Next </button>
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+            >
+              {" "}
+              Previous{" "}
+            </button>
+            <span>
+              {" "}
+              Page {currentPage} of {animeData.totalPages}{" "}
+            </span>
+            <button
+              disabled={currentPage === animeData.totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
+            >
+              {" "}
+              Next{" "}
+            </button>
           </div>
         </>
       )}

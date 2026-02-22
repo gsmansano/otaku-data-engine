@@ -32,7 +32,14 @@ export const getTopAnime = async (req, res) => {
 export const getAnimeById = async (req, res) => {
   const { id } = req.params;
   try {
-    const queryText = "SELECT * FROM mart_anime_overview WHERE anime_id = $1";
+    const queryText = `
+   SELECT 
+      m.*, 
+      d.image_url
+    FROM mart_anime_overview m
+    JOIN dim_anime d ON m.anime_id = d.anime_id
+    WHERE m.anime_id = $1;`;
+
     const { rows } = await db.query(queryText, [id]);
 
     if (rows.length === 0) {
