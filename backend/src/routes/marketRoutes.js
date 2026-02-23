@@ -4,7 +4,7 @@ import { getMarketSummary, getStudioPerformance, getYearlyTrends } from '../cont
 const router = express.Router();
 
 router.get('/summary', getMarketSummary);
-router.get('/trends', getYearlyTrends);
+router.get('/yearly-trends', getYearlyTrends);
 router.get('/studios', getStudioPerformance)
 
 export default router;

@@ -24,8 +24,9 @@ export const getYearlyTrends = async (req, res) => {
       SELECT 
         release_year,
         COUNT(*) as release_count,
-        ROUND(AVG(score), 2) as avg_year_score,
-        ROUND(AVG(members), 0) as avg_popularity
+        ROUND(AVG(score)::numeric, 2) as avg_year_score,
+        ROUND(AVG(members)::numeric, 0) as avg_members,
+        ROUND(AVG(favorites)::numeric, 0) as avg_favorites
       FROM mart_anime_overview
       WHERE release_year IS NOT NULL
       GROUP BY release_year
@@ -56,9 +57,8 @@ export const getStudioPerformance = async (req, res) => {
 
     const { rows } = await db.query(queryText);
     res.status(200).json(rows);
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
-    res.status(500).json({error: 'Failed to fetch studio performance.'});
+    res.status(500).json({ error: "Failed to fetch studio performance." });
   }
 };
