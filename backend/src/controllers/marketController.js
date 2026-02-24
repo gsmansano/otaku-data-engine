@@ -9,7 +9,7 @@ export const getMarketSummary = async (req, res) => {
                 MAX(members) as top_title_reach,
                 ROUND(AVG(score), 2) as average_market_score,
                 (SELECT COUNT(*) FROM dim_studios) as total_studios
-                FROM mart_anime_overvieW`;
+                FROM mart_anime_overview`;
 
     const { rows } = await db.query(queryText);
     res.status(200).json(rows[0]);
@@ -60,5 +60,55 @@ export const getStudioPerformance = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch studio performance." });
+  }
+};
+
+export const getGenrePerformance = async (req, res) => {
+  try {
+    const queryText = `
+    SELECT 
+        trim(g.gen) as genre, 
+        COUNT(*) as title_count, 
+        ROUND(AVG(main.score)::numeric, 2) as avg_score
+    FROM (
+        SELECT genres, score 
+        FROM mart_anime_overview 
+        WHERE genres IS NOT NULL
+    ) AS main
+    CROSS JOIN LATERAL regexp_split_to_table(main.genres, ',') AS g(gen)
+    GROUP BY trim(g.gen)
+    ORDER BY title_count DESC;
+  `;
+
+    const { rows } = await db.query(queryText);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
+export const getThemePerformance = async (req, res) => {
+  try {
+    const queryText = `
+    SELECT 
+        trim(t.theme_name) as theme, 
+        COUNT(*) as title_count, 
+        ROUND(AVG(main.score)::numeric, 2) as avg_score
+    FROM (
+        SELECT themes, score 
+        FROM mart_anime_overview 
+        WHERE themes IS NOT NULL
+    ) AS main
+    CROSS JOIN LATERAL regexp_split_to_table(main.themes, ',') AS t(theme_name)
+    GROUP BY trim(t.theme_name)
+    ORDER BY title_count DESC;
+  `;
+
+    const { rows } = await db.query(queryText);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
   }
 };
