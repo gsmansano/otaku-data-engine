@@ -8,15 +8,21 @@ import EngagementChart from "../components/market/EngagementChart";
 function MarketTrends() {
   const [data, setData] = useState([]);
   const [genreData, setGenreData] = useState([]);
+  const [themeData, setThemeData] = useState([]);
+  const [rankGapData, setRankGapData] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [trendsRes, genreRes] = await Promise.all([
+        // axios fetch to backend
+        const [trendsRes, genreRes, themeRes, gapRes] = await Promise.all([
           axios.get("http://localhost:3001/api/market/yearly-trends"),
           axios.get("http://localhost:3001/api/market/genre-performance"),
+          axios.get("http://localhost:3001/api/market/theme-performance"),
+          axios.get("http://localhost:3001/api/market/rank-gaps"),
         ]);
 
+        
         const cleanedTrends = trendsRes.data.map((item) => ({
           year: item.release_year,
           count: Number(item.release_count),
@@ -25,6 +31,28 @@ function MarketTrends() {
           favorites: Number(item.avg_favorites),
         }));
         setData(cleanedTrends);
+
+
+        setThemeData(
+          themeRes.data.map((item) => ({
+            theme: item.theme,
+            count: Number(item.title_count),
+            score: Number(item.avg_score),
+          })),
+        );
+
+      
+        setRankGapData(gapRes.data);
+
+        // sorting gap data for the tables.
+        const topGems = rankGapData.slice(0, 10);
+        const topHype = [...rankGapData]
+          .sort((a, b) => a.gap - b.gap)
+          .slice(0, 10);
+        const topPerfect = [...rankGapData]
+          .sort((a, b) => Math.abs(a.gap) - Math.abs(b.gap))
+          .slice(0, 10);
+
 
         const cleanedGenres = genreRes.data.map((item) => ({
           genre: item.genre,
@@ -53,7 +81,7 @@ function MarketTrends() {
       : 0;
 
   return (
-    // building the trend charts.
+    // building the charts.
 
     <div className={styles.container}>
       <h2 className={styles.title}>Industry Evolution</h2>
@@ -68,7 +96,7 @@ function MarketTrends() {
       <p className={styles.chartSubtitle}>
         Comparing Audience Size (Members) vs. Hardcore Fans (Favorites)
       </p>
-        
+
       <EngagementChart data={sortedData} />
 
       <h2 className={`${styles.title} ${styles.sectionSpacer}`}>

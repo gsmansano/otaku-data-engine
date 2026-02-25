@@ -1,5 +1,6 @@
 import * as db from "../config/db.js";
 
+// market summary query for the home page (so far)
 export const getMarketSummary = async (req, res) => {
   try {
     const queryText = `
@@ -18,6 +19,7 @@ export const getMarketSummary = async (req, res) => {
   }
 };
 
+// yearly trends query
 export const getYearlyTrends = async (req, res) => {
   try {
     const queryText = `
@@ -39,6 +41,7 @@ export const getYearlyTrends = async (req, res) => {
   }
 };
 
+// studio performance main query
 export const getStudioPerformance = async (req, res) => {
   try {
     const queryText = `
@@ -63,6 +66,7 @@ export const getStudioPerformance = async (req, res) => {
   }
 };
 
+// genre performance query 
 export const getGenrePerformance = async (req, res) => {
   try {
     const queryText = `
@@ -88,6 +92,7 @@ export const getGenrePerformance = async (req, res) => {
   }
 };
 
+// theme performance query
 export const getThemePerformance = async (req, res) => {
   try {
     const queryText = `
@@ -110,5 +115,33 @@ export const getThemePerformance = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
+  }
+};
+
+// Rank gaps query
+// the idea is comparing how popular and how "good" they are
+// popularity rank - score rank = gap
+// high positive values mean good but less popular
+// high negative values mean bad but popular
+// the close to 0 the gap, the more both rankings are telling the same story (rank 50 in score and rank 50 in popularity)
+
+export const getRankGaps = async (req, res) => {
+  const queryText = `
+    SELECT 
+        title,
+        rank as quality_rank,
+        popularity as popularity_rank,
+        (popularity - rank) as gap
+    FROM mart_anime_overview
+    WHERE rank IS NOT NULL AND popularity IS NOT NULL
+    ORDER BY gap DESC 
+  `;
+
+  try {
+    const { rows } = await db.query(queryText);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching rank gaps:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
